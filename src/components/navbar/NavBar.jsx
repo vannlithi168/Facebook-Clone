@@ -1,92 +1,17 @@
-import React, { useState, useEffect, useRef } from "react";
-import { styled, alpha } from "@mui/material/styles";
+import React from "react";
+import { styled } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import InputBase from "@mui/material/InputBase";
-import Badge from "@mui/material/Badge";
-import SearchIcon from "@mui/icons-material/Search";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-}));
-
-const SearchIconWrapper = styled("div")(({ theme, showSearchIcon }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  visibility: showSearchIcon ? "visible" : "hidden", // Hide/show based on state
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
-  },
-}));
+import SearchAppBar from "../searchbar/SearchBar";
+import BasicTabs from "../tab/TabBar";
 
 export default function PrimarySearchAppBar() {
-  const [isSearchActive, setSearchActive] = useState(false);
-  const [isInputFocused, setInputFocused] = useState(false);
-  const searchRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(event.target) &&
-        event.target.tagName !== "INPUT"
-      ) {
-        setSearchActive(false);
-        setInputFocused(false);
-      }
-    };
-
-    window.addEventListener("click", handleClickOutside);
-
-    return () => {
-      window.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
-
-  const handleSearchClick = () => {
-    setSearchActive(!isSearchActive);
-    setInputFocused(false); // Reset input focus state when search icon clicked
-  };
-
-  const handleInputFocus = () => {
-    setInputFocused(true);
-  };
-
-  const handleInputBlur = () => {
-    setInputFocused(false);
-  };
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ bgcolor: "#fff", color: "#1c1e2" }}>
@@ -96,77 +21,35 @@ export default function PrimarySearchAppBar() {
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            sx={{
-              marginRight: isSearchActive ? 0 : -3,
-              visibility: isInputFocused ? "hidden" : "visible", // Hide/show based on input focus
-            }}>
+            sx={{ marginRight: -3 }}>
             <img
               src="img/fb_logo.png"
               alt="Facebook Logo"
               style={{
                 width: "40px",
                 height: "40px",
+                marginRight: "20px",
               }}
             />
           </IconButton>
-
-          {isSearchActive && (
-            <IconButton
-              size="large"
-              edge="start"
-              color="black"
-              aria-label="back"
-              onClick={() => setSearchActive(false)}>
-              <ArrowBackIcon
-                style={{
-                  paddingRight: "0",
-                  marginRight: "-20px",
-                  marginLeft: "-90px",
-                }}
-              />
-            </IconButton>
-          )}
-
-          <Search
-            ref={searchRef}
-            sx={{
-              color: "black",
-              bgcolor: "#E1E1E1",
-              borderRadius: "20px",
-            }}>
-            <SearchIconWrapper showSearchIcon={!isInputFocused}>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              autoFocus={isSearchActive}
-              placeholder="Search Facebook ..."
-              inputProps={{ "aria-label": "search" }}
-              onFocus={handleInputFocus}
-              onBlur={handleInputBlur}
-              onClick={() => {
-                setSearchActive(true);
-                setInputFocused(true);
-              }}
-            />
-          </Search>
-
-          <Box sx={{ flexGrow: 1 }} />
+          <SearchAppBar />
+          <Box sx={{ flexGrow: 1 }} />{" "}
+          {/* This pushes the BasicTabs to the center */}
+          <BasicTabs />
+          <Box sx={{ flexGrow: 1 }} />{" "}
+          {/* This pushes the icons to the right */}
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
               size="large"
               aria-label="show 4 new mails"
-              color="inherit">
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
+              color="black">
+              <MailIcon />
             </IconButton>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
-              color="inherit">
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
+              color="black">
+              <NotificationsIcon />
             </IconButton>
             <IconButton
               size="large"
@@ -174,7 +57,7 @@ export default function PrimarySearchAppBar() {
               aria-label="account of current user"
               aria-controls="primary-search-account-menu"
               aria-haspopup="true"
-              color="inherit">
+              color="black">
               <AccountCircle />
             </IconButton>
           </Box>
@@ -184,7 +67,7 @@ export default function PrimarySearchAppBar() {
               aria-label="show more"
               aria-controls="primary-search-account-menu-mobile"
               aria-haspopup="true"
-              color="inherit">
+              color="black">
               <MoreIcon />
             </IconButton>
           </Box>
